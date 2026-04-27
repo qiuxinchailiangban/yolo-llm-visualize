@@ -1,0 +1,30 @@
+spring:
+  config:
+    activate:
+      on-profile: mysql
+  datasource:
+    url: ${DB_URL:jdbc:mysql://127.0.0.1:3306/patient_followup?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  h2:
+    console:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  sql:
+    init:
+      mode: never
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+
+app:
+  wechat-miniapp:
+    app-id: ${WECHAT_MINIAPP_APP_ID:}
+    app-secret: ${WECHAT_MINIAPP_APP_SECRET:}
+    page-path: ${WECHAT_MINIAPP_PAGE_PATH:pages/questionnaire/index}
+    env-version: ${WECHAT_MINIAPP_ENV_VERSION:trial}
+    public-api-base-url: ${WECHAT_MINIAPP_PUBLIC_API_BASE_URL:http://localhost:8080}

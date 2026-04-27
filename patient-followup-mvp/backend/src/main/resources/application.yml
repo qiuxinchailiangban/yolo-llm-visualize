@@ -1,0 +1,63 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: patient-followup-backend
+  datasource:
+    url: jdbc:h2:mem:followup;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+  jackson:
+    default-property-inclusion: non_null
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+app:
+  cors:
+    allowed-origins:
+      - http://localhost:5173
+      - http://localhost:4173
+      - http://127.0.0.1:4173
+      - https://servicewechat.com
+  admin-auth:
+    username: admin
+    password: admin123456
+    token-ttl-minutes: 480
+  wechat-miniapp:
+    app-id: ${WECHAT_MINIAPP_APP_ID:}
+    app-secret: ${WECHAT_MINIAPP_APP_SECRET:}
+    page-path: ${WECHAT_MINIAPP_PAGE_PATH:pages/questionnaire/index}
+    env-version: ${WECHAT_MINIAPP_ENV_VERSION:trial}
+    public-api-base-url: ${WECHAT_MINIAPP_PUBLIC_API_BASE_URL:http://localhost:8080}
+  rpa-integration:
+    enabled: ${RPA_INTEGRATION_ENABLED:false}
+    sdk-root: ${OMNI_BOT_SDK_ROOT:E:/wxb/360sd/omni_bot_sdk-1.0.6}
+    config-path: ${OMNI_BOT_CONFIG_PATH:}
+    python-command: ${OMNI_BOT_PYTHON:python}
+    send-script: ${OMNI_BOT_SEND_SCRIPT:send_once.py}
+    delayed-send-script: ${OMNI_BOT_DELAYED_SEND_SCRIPT:send_later.py}
+    send-mode: ${OMNI_BOT_SEND_MODE:enter}
+    wait-seconds: ${OMNI_BOT_WAIT_SECONDS:8}
+    timeout-seconds: ${OMNI_BOT_TIMEOUT_SECONDS:90}
+    default-countdown-seconds: ${OMNI_BOT_DEFAULT_COUNTDOWN_SECONDS:5}
+  automation-worker:
+    token: ${AUTOMATION_WORKER_TOKEN:followup-worker-token}

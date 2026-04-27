@@ -1,0 +1,9 @@
+[project]
+name = "openai-bot-plugin"
+version = "0.1.0"
+description = "OpenAI 聊天机器人插件"
+authors = [{name = "huchundong", email = "gycm520@gmail.com"}]
+dependencies = []
+
+[project.entry-points."omni_bot.plugins"]
+openai-bot-plugin = "openai_bot_plugin.main:OpenAIBotPlugin" 

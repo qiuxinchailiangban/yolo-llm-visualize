@@ -1,0 +1,42 @@
+<view class="page">
+  <view class="card" wx:if="{{loading}}">加载中...</view>
+
+  <view wx:else>
+    <view class="card">
+      <view class="title">{{title}}</view>
+      <view class="subtitle" wx:if="{{mode === 'task'}}">患者：{{patientName}} / 患者ID：{{patientId}} / 阶段：{{stageName}}</view>
+      <view class="subtitle" wx:elif="{{mode === 'follow_up_shared'}}">随访阶段：{{stageName}}</view>
+    </view>
+
+    <view class="card" wx:if="{{mode === 'intake'}}">
+      <view class="section-title">患者基本信息</view>
+      <input class="input" placeholder="姓名" data-field="name" bindinput="onPatientInput" />
+      <input class="input" placeholder="性别" data-field="gender" bindinput="onPatientInput" />
+      <input class="input" placeholder="手机号" data-field="phone" bindinput="onPatientInput" />
+      <input class="input" placeholder="出生日期，如 1990-01-01" data-field="birthDate" bindinput="onPatientInput" />
+      <input class="input" placeholder="手术日期，如 2026-04-22" data-field="surgeryDate" bindinput="onPatientInput" />
+      <textarea class="textarea" placeholder="诊断信息" data-field="diagnosis" bindinput="onPatientInput" />
+    </view>
+
+    <view class="card" wx:if="{{mode === 'follow_up_shared'}}">
+      <view class="section-title">请先核对身份</view>
+      <view class="hint">同一阶段所有患者用同一个码；填写姓名和手机号后，系统会自动定位到您的随访任务。</view>
+      <input class="input" placeholder="您的姓名（与就诊登记一致）" data-field="name" bindinput="onFollowUpInput" />
+      <input class="input" placeholder="您的手机号（与就诊登记一致）" type="number" data-field="phone" bindinput="onFollowUpInput" />
+    </view>
+
+    <view class="card">
+      <view class="section-title">问卷内容</view>
+      <block wx:for="{{items}}" wx:key="key">
+        <view class="field">
+          <view class="label">{{item.label}}</view>
+          <textarea wx:if="{{item.type === 'textarea'}}" class="textarea" data-key="{{item.key}}" bindinput="onAnswerInput" />
+          <input wx:elif="{{item.type === 'number'}}" class="input" type="number" data-key="{{item.key}}" bindinput="onAnswerInput" />
+          <input wx:else class="input" data-key="{{item.key}}" bindinput="onAnswerInput" />
+        </view>
+      </block>
+    </view>
+
+    <button class="submit" type="primary" bindtap="submit">提交问卷</button>
+  </view>
+</view>

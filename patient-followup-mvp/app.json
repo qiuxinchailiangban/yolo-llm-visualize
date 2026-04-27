@@ -1,0 +1,11 @@
+{
+  "pages": [
+    "pages/questionnaire/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "问卷填写",
+    "navigationBarBackgroundColor": "#1677ff",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f7fa"
+  }
+}

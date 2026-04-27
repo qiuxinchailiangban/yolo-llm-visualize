@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Desktop Worker Shell</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="desktop-shell">
+      <header class="desktop-header">
+        <div class="brand">
+          <div class="brand-mark">随访</div>
+          <div class="brand-copy">
+            <strong>患者随访桌面版</strong>
+            <span>统一入口：随访系统 + 工作区</span>
+          </div>
+        </div>
+
+        <nav class="desktop-nav">
+          <button id="tabAdminButton" class="nav-button active">随访系统</button>
+          <button id="tabWorkerButton" class="nav-button">工作区</button>
+        </nav>
+
+        <div class="header-status">
+          <span class="status-chip">
+            <i class="chip-dot"></i>
+            Backend
+            <strong id="backendStatusValue">STOPPED</strong>
+          </span>
+          <span class="status-chip">
+            <i class="chip-dot"></i>
+            Worker
+            <strong id="workerStatusValue">STOPPED</strong>
+          </span>
+          <button id="openWorkspaceSettingsButton" class="icon-button" type="button" aria-label="打开设置">&#9881;</button>
+        </div>
+      </header>
+
+      <main class="desktop-main">
+        <section id="adminTab" class="page-view active">
+          <div class="followup-page">
+            <div class="followup-toolbar">
+              <div class="toolbar-left">
+                <span class="page-title">随访系统</span>
+                <span class="page-subtitle">患者管理、问卷任务、随访阶段、模板管理都在这里</span>
+              </div>
+              <div class="actions">
+                <button id="startBackendButton">启动 Backend</button>
+                <button id="stopBackendButton" class="danger" disabled>停止 Backend</button>
+                <button id="reloadAdminButton" class="secondary">刷新页面</button>
+              </div>
+            </div>
+            <div class="followup-frame-wrap">
+              <iframe id="adminFrame" title="admin-web"></iframe>
+            </div>
+          </div>
+        </section>
+
+        <section id="workerTab" class="page-view">
+          <div class="workspace-page">
+            <section class="workspace-hero">
+              <div class="workspace-intro">
+                <h2>工作区</h2>
+              </div>
+              <div class="control-stack">
+                <div class="control-row">
+                  <span class="control-label">Worker</span>
+                  <button
+                    id="workerToggleButton"
+                    class="switch-toggle"
+                    type="button"
+                    role="switch"
+                    aria-checked="false"
+                    aria-label="切换 Worker"
+                  >
+                    <span class="switch-track">
+                      <span class="switch-knob"></span>
+                    </span>
+                  </button>
+                </div>
+                <div class="control-row">
+                  <span class="control-label">微信自动回复</span>
+                  <button
+                    id="botToggleButton"
+                    class="switch-toggle"
+                    type="button"
+                    role="switch"
+                    aria-checked="false"
+                    aria-label="切换 Bot"
+                  >
+                    <span class="switch-track">
+                      <span class="switch-knob"></span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+              <div class="hero-metrics">
+                <article class="metric-card">
+                  <span>成功任务</span>
+                  <strong id="successValue">0</strong>
+                </article>
+                <article class="metric-card">
+                  <span>失败任务</span>
+                  <strong id="failureValue" class="danger-text">0</strong>
+                </article>
+                <article class="metric-card metric-card-wide">
+                  <span>当前倒计时</span>
+                  <strong id="countdownValue">空闲</strong>
+                </article>
+              </div>
+            </section>
+
+            <section class="workspace-grid">
+              <section class="workspace-card task-card">
+                <div class="card-header">
+                  <h3>最近 20 条任务</h3>
+                  <span>本次桌面会话内实时刷新</span>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>时间</th>
+                        <th>任务号</th>
+                        <th>目标会话</th>
+                        <th>状态</th>
+                        <th>倒计时</th>
+                      </tr>
+                    </thead>
+                    <tbody id="taskTableBody">
+                      <tr class="empty-row">
+                        <td colspan="5">暂无任务</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+
+              <section class="workspace-card log-card">
+                <div class="card-header">
+                  <h3>实时日志</h3>
+                  <div class="header-actions">
+                    <span>显示 backend、worker、bridge 和子进程输出</span>
+                    <button id="clearLogsButton" class="secondary" type="button">清空日志</button>
+                  </div>
+                </div>
+                <pre id="logOutput"></pre>
+              </section>
+            </section>
+
+            <div id="workspaceOverlay" class="workspace-overlay">
+              <div class="workspace-drawer">
+                <div class="drawer-header">
+                  <div>
+                    <h3 id="drawerTitle">工作区设置</h3>
+                    <p id="drawerSubtitle">集中管理 Worker 配置、置顶选项和微信自动回复参数</p>
+                  </div>
+                  <button id="closeDrawerButton" class="secondary">关闭</button>
+                </div>
+
+                <section id="workerConfigPanel" class="drawer-panel active">
+                  <div class="panel-block">
+                    <div class="panel-block-header">
+                      <h4>Worker 设置</h4>
+                      <p>切换配置文件、查看执行环境与基础选项</p>
+                    </div>
+                    <div class="kv-list compact">
+                      <div class="kv-item">
+                        <span>配置文件</span>
+                        <strong id="workerConfigPathValue">-</strong>
+                      </div>
+                      <div class="kv-item">
+                        <span>后端地址</span>
+                        <strong id="backendValue">-</strong>
+                      </div>
+                      <div class="kv-item">
+                        <span>管理后台地址</span>
+                        <strong id="adminUrl">-</strong>
+                      </div>
+                      <div class="kv-item">
+                        <span>Worker ID</span>
+                        <strong id="workerIdValue">-</strong>
+                      </div>
+                      <div class="kv-item">
+                        <span>任务类型</span>
+                        <strong id="jobTypeValue">-</strong>
+                      </div>
+                      <div class="kv-item">
+                        <span>Python 环境</span>
+                        <strong id="pythonEnvValue">-</strong>
+                      </div>
+                    </div>
+                    <div class="toggle-row drawer-toggle-row">
+                      <label class="inline-check">
+                        <input id="topmostToggle" type="checkbox" />
+                        <span>桌面壳置顶</span>
+                      </label>
+                    </div>
+                    <div class="actions drawer-actions">
+                      <button id="chooseConfigButton" class="secondary">选择配置</button>
+                    </div>
+                  </div>
+                </section>
+
+                <section id="autoReplyPanel" class="drawer-panel active">
+                  <div class="panel-block">
+                    <div class="panel-block-header">
+                      <h4>微信自动回复设置</h4>
+                      <p>管理 omni-bot 的白名单、Prompt 与记忆参数</p>
+                    </div>
+                  <div class="kv-list compact">
+                    <div class="kv-item">
+                      <span>omni 配置</span>
+                      <strong id="omniConfigPathValue">-</strong>
+                    </div>
+                    <div class="kv-item">
+                      <span>当前模型</span>
+                      <strong id="autoReplyModelValue">-</strong>
+                    </div>
+                    <div class="kv-item">
+                      <span>配置状态</span>
+                      <strong id="autoReplyStatusValue">未加载</strong>
+                    </div>
+                  </div>
+                  <div class="toggle-row">
+                    <label class="inline-check">
+                      <input id="autoReplyEnabledToggle" type="checkbox" />
+                      <span>启用 LLM 自动回复</span>
+                    </label>
+                    <label class="inline-check">
+                      <input id="autoReplyOnlyPrivateToggle" type="checkbox" />
+                      <span>仅回复私聊</span>
+                    </label>
+                  </div>
+                  <div class="form-grid">
+                    <label class="field">
+                      <span>白名单</span>
+                      <textarea
+                        id="whitelistInput"
+                        rows="5"
+                        placeholder="每行一个好友显示名或群聊名称；留空 = 不限制"
+                      ></textarea>
+                    </label>
+                    <label class="field field-wide">
+                      <span>Prompt / 人设</span>
+                      <textarea
+                        id="promptInput"
+                        rows="8"
+                        placeholder="决定自动回复的语气、风格和上下文规则"
+                      ></textarea>
+                    </label>
+                  </div>
+                  <div class="memory-grid">
+                    <label class="inline-check">
+                      <input id="memoryEnabledToggle" type="checkbox" />
+                      <span>启用对话记忆</span>
+                    </label>
+                    <label class="field compact">
+                      <span>最多保留轮数</span>
+                      <input id="memoryMaxTurnsInput" type="number" min="0" max="100" />
+                    </label>
+                    <label class="field compact">
+                      <span>记忆超时（分钟）</span>
+                      <input id="memoryTtlInput" type="number" min="0" max="10080" />
+                    </label>
+                    <label class="field field-wide">
+                      <span>持久化文件</span>
+                      <input
+                        id="memoryPersistInput"
+                        type="text"
+                        placeholder="留空 = 只保存在 Bot 进程内存里"
+                      />
+                    </label>
+                  </div>
+                  <div class="actions drawer-actions">
+                    <button id="reloadAutoReplyButton" class="secondary">重载配置</button>
+                    <button id="saveAutoReplyButton">保存到 config.yaml</button>
+                    <button id="clearMemoryButton" class="secondary">清空记忆文件</button>
+                  </div>
+                  <p class="field-tip">保存后需要重启 `run_bot.py` 才会真正生效。</p>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./renderer.js"></script>
+  </body>
+  </html>

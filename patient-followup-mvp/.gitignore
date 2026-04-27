@@ -1,0 +1,5 @@
+backend/src/main/resources/application-local.yml
+config/local.js
+tmp-qrcode.png
+desktop-worker/config.json
+desktop-worker/electron-shell/node_modules/

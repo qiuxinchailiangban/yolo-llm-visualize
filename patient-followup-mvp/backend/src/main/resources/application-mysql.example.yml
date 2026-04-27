@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/patient_followup?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: your_password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+
+app:
+  wechat-miniapp:
+    app-id: wx_your_appid
+    app-secret: your_miniapp_secret
+    page-path: pages/questionnaire/index
+    env-version: trial
+    public-api-base-url: http://localhost:8080

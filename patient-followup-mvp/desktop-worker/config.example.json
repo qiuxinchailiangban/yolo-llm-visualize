@@ -1,0 +1,16 @@
+{
+  "backend_base_url": "http://localhost:8080",
+  "worker_token": "followup-worker-token",
+  "worker_id": "desktop-worker-001",
+  "job_type": "WECHAT_RPA_SEND",
+  "always_on_top": true,
+  "poll_interval_seconds": 3,
+  "sdk_root": "E:/wxb/360sd/omni_bot_sdk-1.0.6",
+  "python_command": "python",
+  "config_path": "E:/wxb/360sd/omni_bot_sdk-1.0.6/config.yaml",
+  "send_script": "send_once.py",
+  "delayed_send_script": "send_later.py",
+  "send_mode": "enter",
+  "wait_seconds": 8,
+  "timeout_seconds": 120
+}

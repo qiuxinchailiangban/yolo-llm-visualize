@@ -1,0 +1,14 @@
+{
+  "name": "desktop-worker-electron",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Electron shell for patient followup desktop worker",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^36.0.0",
+    "ms": "^2.1.3"
+  }
+}

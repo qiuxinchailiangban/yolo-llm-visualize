@@ -1,0 +1,63 @@
+.page {
+  padding: 24rpx;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+.subtitle {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #909399;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  margin-bottom: 20rpx;
+}
+
+.hint {
+  margin: -8rpx 0 20rpx;
+  padding: 16rpx;
+  background: #f0f6ff;
+  color: #4a6fa5;
+  font-size: 26rpx;
+  border-radius: 12rpx;
+  line-height: 1.5;
+}
+
+.field {
+  margin-bottom: 20rpx;
+}
+
+.label {
+  margin-bottom: 10rpx;
+  font-size: 28rpx;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: #f5f7fa;
+  border-radius: 12rpx;
+  padding: 20rpx;
+}
+
+.textarea {
+  min-height: 140rpx;
+}
+
+.submit {
+  margin-top: 24rpx;
+}

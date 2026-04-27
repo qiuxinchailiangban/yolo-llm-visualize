@@ -1,0 +1,4 @@
+[omni_bot.plugins]
+auto-reply-plugin = omni_bot_sdk.plugins.core.auto_reply_plugin:AutoReplyPlugin
+block-empty-room-plugin = omni_bot_sdk.plugins.core.block_empty_room_plugin:BlockEmptyRoomPlugin
+self-msg-plugin = omni_bot_sdk.plugins.core.self_msg_plugin:SelfMsgPlugin
